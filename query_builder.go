@@ -123,9 +123,11 @@ func (p *Paginator) First() (string, error) {
 	}
 
 	sqlBuilder.WriteString("WHERE (1 = 1) \n")
-	sqlBuilder.WriteString("AND (")
-	sqlBuilder.WriteString(wSQL)
-	sqlBuilder.WriteString(") \n")
+	if wSQL != "" {
+		sqlBuilder.WriteString("AND (\n")
+		sqlBuilder.WriteString(trimWherePrefix(wSQL))
+		sqlBuilder.WriteString("\n)\n")
+	}
 
 	if gSQL != "" {
 		sqlBuilder.WriteString(gSQL)
@@ -194,9 +196,9 @@ func (p *Paginator) Pivot() (string, error) {
 	sqlBuilder.WriteString(" >= ?) \n")
 
 	if wSQL != "" {
-		sqlBuilder.WriteString("AND ( \n")
-		sqlBuilder.WriteString(wSQL)
-		sqlBuilder.WriteString(") \n")
+		sqlBuilder.WriteString("AND (\n")
+		sqlBuilder.WriteString(trimWherePrefix(wSQL))
+		sqlBuilder.WriteString("\n)\n")
 	}
 
 	if gSQL != "" {
@@ -303,9 +305,9 @@ func (p *Paginator) Retrieve(pivot string, dest interface{}) error {
 	sqlBuilder.WriteString(" > ?)) \n")
 
 	if wSQL != "" {
-		sqlBuilder.WriteString("AND ( \n")
-		sqlBuilder.WriteString(wSQL)
-		sqlBuilder.WriteString(") \n")
+		sqlBuilder.WriteString("AND (\n")
+		sqlBuilder.WriteString(trimWherePrefix(wSQL))
+		sqlBuilder.WriteString("\n)\n")
 	}
 
 	if gSQL != "" {
@@ -370,19 +372,19 @@ func (p *Paginator) Counts(dest *int64) error {
 	sqlBuilder.WriteString("WHERE (1=1) \n")
 
 	if wSQL != "" {
-		sqlBuilder.WriteString("AND ( \n")
-		sqlBuilder.WriteString(wSQL)
-		sqlBuilder.WriteString(") \n")
+		sqlBuilder.WriteString("AND (\n")
+		sqlBuilder.WriteString(trimWherePrefix(wSQL))
+		sqlBuilder.WriteString("\n)\n")
 	}
 
-	args := jArgs
 	if gSQL != "" {
 		sqlBuilder.WriteString(gSQL)
 		sqlBuilder.WriteString(" \n")
-		args = append(args, wArgs...)
 	}
 
 	sql := sqlBuilder.String()
+
+	args := append(jArgs, wArgs...)
 	var err error
 	sql, args, err = sqlx.In(sql, args...)
 	if err != nil {
@@ -395,4 +397,12 @@ func (p *Paginator) Counts(dest *int64) error {
 	}
 
 	return nil
+}
+
+func trimWherePrefix(w string) string {
+	if strings.HasPrefix(w, string(WhereTypeAnd)) || strings.HasPrefix(w, string(WhereTypeOr)) {
+		w = strings.TrimPrefix(w, string(WhereTypeAnd))
+		w = strings.TrimPrefix(w, string(WhereTypeOr))
+	}
+	return strings.TrimSpace(w)
 }
