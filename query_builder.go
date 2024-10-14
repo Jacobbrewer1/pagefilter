@@ -256,6 +256,16 @@ func (p *Paginator) Retrieve(pivot string, dest interface{}) error {
 			cols.WriteString(", ")
 		}
 
+		// If the db tag contains "autoinc" or "pk" then we need to use the first part of the db tag
+		// as the column name and the second part as the alias. This is because the db tag is used to
+		// generate the SQL query and the SQL query must be valid.
+		//
+		// e.g. `db:"id,autoinc,pk"` will generate "t.id 'id'" in the SQL query
+		if strings.Contains(dbTag, ",autoinc") || strings.Contains(dbTag, ",pk") {
+			cols.WriteString("t." + strings.Split(dbTag, ",")[0])
+			continue
+		}
+
 		// In order for our db tag to remain compatible with the sql db tag mapper
 		// we must use commas as separators. However, we want everything after the first comma to be
 		// one argument, as the arbitrary SQL there may itself contain commas, hence the SplitN
