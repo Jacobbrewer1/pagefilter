@@ -276,14 +276,16 @@ func (p *Paginator) Retrieve(pivot string, dest any) error {
 		// generate the SQL query and the SQL query must be valid.
 		//
 		// e.g. `db:"id,autoinc,pk"` will generate "t.id 'id'" in the SQL query
-		for _, tag := range strings.Split(dbTag, ",") {
-			switch tag {
-			case dbTagAutoIncrement:
-				dbTag = strings.ReplaceAll(dbTag, ","+dbTagAutoIncrement, "")
-			case dbTagPrimaryKey:
-				dbTag = strings.ReplaceAll(dbTag, ","+dbTagPrimaryKey, "")
-			case dbTagDefault:
-				dbTag = strings.ReplaceAll(dbTag, ","+dbTagDefault, "")
+		if structTags := strings.Split(dbTag, ","); len(structTags) > 1 {
+			for _, tag := range structTags {
+				switch tag {
+				case dbTagAutoIncrement:
+					dbTag = strings.ReplaceAll(dbTag, ","+dbTagAutoIncrement, "")
+				case dbTagPrimaryKey:
+					dbTag = strings.ReplaceAll(dbTag, ","+dbTagPrimaryKey, "")
+				case dbTagDefault:
+					dbTag = strings.ReplaceAll(dbTag, ","+dbTagDefault, "")
+				}
 			}
 		}
 
