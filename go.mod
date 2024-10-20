@@ -1,4 +1,4 @@
-module github.com/Jacobbrewer1/pagefilter
+module github.com/jacobbrewer1/pagefilter
 
 go 1.23
 
