@@ -12,7 +12,6 @@ import (
 
 	"github.com/chigopher/pathlib"
 	"github.com/mitchellh/go-homedir"
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -215,7 +214,10 @@ func (r *RootApp) Run() error {
 	if r.Config.Print {
 		osp = &pkg.StdoutStreamProvider{}
 	}
-	buildTags := strings.Split(r.Config.BuildTags, " ")
+	var buildTags []string
+	if r.Config.BuildTags != "" {
+		buildTags = strings.Split(r.Config.BuildTags, " ")
+	}
 
 	var boilerplate string
 	if r.Config.BoilerplateFile != "" {
@@ -224,6 +226,16 @@ func (r *RootApp) Run() error {
 			log.Fatal().Msgf("Failed to read boilerplate file %s: %v", r.Config.BoilerplateFile, err)
 		}
 		boilerplate = string(data)
+	}
+
+	if !r.Config.WithExpecter {
+		logging.WarnDeprecated(
+			ctx,
+			"with-expecter will be permanently set to True in v3",
+			map[string]any{
+				"url": logging.DocsURL("/deprecations/#with-expecter"),
+			},
+		)
 	}
 
 	configuredPackages, err := r.Config.GetPackages(ctx)
@@ -297,7 +309,7 @@ func (r *RootApp) Run() error {
 		log.Fatal().Msgf("Use --name to specify the name of the interface or --all for all interfaces found")
 	}
 
-	warnDeprecated(
+	logging.WarnDeprecated(
 		ctx,
 		"use of the packages config will be the only way to generate mocks in v3. Please migrate your config to use the packages feature.",
 		map[string]any{
@@ -378,6 +390,7 @@ func (r *RootApp) Run() error {
 		UnrollVariadic:       r.Config.UnrollVariadic,
 		WithExpecter:         r.Config.WithExpecter,
 		ReplaceType:          r.Config.ReplaceType,
+		ResolveTypeAlias:     r.Config.ResolveTypeAlias,
 	}, osp, r.Config.DryRun)
 
 	generated := walker.Walk(ctx, visitor)
@@ -388,26 +401,4 @@ func (r *RootApp) Run() error {
 	}
 
 	return nil
-}
-
-func warn(ctx context.Context, prefix string, message string, fields map[string]any) {
-	log := zerolog.Ctx(ctx)
-	event := log.Warn()
-	if fields != nil {
-		event = event.Fields(fields)
-	}
-	event.Msgf("%s: %s", prefix, message)
-}
-
-func info(ctx context.Context, prefix string, message string, fields map[string]any) {
-	log := zerolog.Ctx(ctx)
-	event := log.Info()
-	if fields != nil {
-		event = event.Fields(fields)
-	}
-	event.Msgf("%s: %s", prefix, message)
-}
-
-func warnDeprecated(ctx context.Context, message string, fields map[string]any) {
-	warn(ctx, "DEPRECATION", message, fields)
 }
