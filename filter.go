@@ -34,23 +34,24 @@ func (m *MultiFilter) Add(f any) {
 		m.joinArgs = append(m.joinArgs, joinArgs...)
 	}
 
-	if wt, okWt := f.(WhereTyper); okWt {
-		whereSQL, whereArgs := wt.Where()
+	switch f := f.(type) {
+	case WhereTyper:
+		whereSQL, whereArgs := f.Where()
 		if whereArgs == nil {
 			whereArgs = make([]any, 0)
 		}
 		wtStr := WhereTypeAnd
-		if wt.WhereType().IsValid() {
-			wtStr = wt.WhereType()
+		if f.WhereType().IsValid() {
+			wtStr = f.WhereType()
 		}
 		m.whereSQL.WriteString(string(wtStr) + " ")
 		m.whereSQL.WriteString(strings.TrimSpace(whereSQL))
 		m.whereSQL.WriteString("\n")
 		m.whereArgs = append(m.whereArgs, whereArgs...)
-	} else if w, ok := f.(Wherer); ok {
-		whereSQL, whereArgs := w.Where()
+	case Wherer:
+		whereSQL, whereArgs := f.Where()
 		if whereArgs == nil {
-			whereArgs = []any{}
+			whereArgs = make([]any, 0)
 		}
 		m.whereSQL.WriteString(string(WhereTypeAnd) + " ") // default to AND
 		m.whereSQL.WriteString(strings.TrimSpace(whereSQL))
@@ -63,11 +64,11 @@ func (m *MultiFilter) Add(f any) {
 	}
 }
 
-func (m *MultiFilter) Join() (string, []any) {
+func (m *MultiFilter) Join() (sqlStr string, args []any) {
 	return strings.TrimSpace(m.joinSQL.String()), m.joinArgs
 }
 
-func (m *MultiFilter) Where() (string, []any) {
+func (m *MultiFilter) Where() (sqlStr string, args []any) {
 	return strings.TrimSpace(m.whereSQL.String()), m.whereArgs
 }
 
