@@ -9,7 +9,7 @@ import (
 // Mock implementation of Wherer
 type mockWherer struct{}
 
-func (m mockWherer) Where() (string, []any) {
+func (m mockWherer) Where() (sqlStr string, args []any) {
 	return "id = ?", []any{1}
 }
 
@@ -18,7 +18,7 @@ type mockWhereTyper struct {
 	typeValue WhereType
 }
 
-func (m mockWhereTyper) Where() (string, []any) {
+func (m mockWhereTyper) Where() (sqlStr string, args []any) {
 	return "name = ?", []any{"test"}
 }
 
