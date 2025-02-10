@@ -3,7 +3,7 @@ package pagefilter
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
 // Mock implementation of Wherer
@@ -26,23 +26,31 @@ func (m mockWhereTyper) WhereType() WhereType {
 	return m.typeValue
 }
 
-func TestWhereType_IsValid(t *testing.T) {
-	assert.True(t, WhereTypeAnd.IsValid())
-	assert.True(t, WhereTypeOr.IsValid())
-	assert.False(t, WhereType("INVALID").IsValid())
+type whereTypeSuite struct {
+	suite.Suite
 }
 
-func TestMockWherer(t *testing.T) {
-	w := mockWherer{}
-	query, args := w.Where()
-	assert.Equal(t, "id = ?", query)
-	assert.Equal(t, []any{1}, args)
+func TestWhereTypeSuite(t *testing.T) {
+	suite.Run(t, new(whereTypeSuite))
 }
 
-func TestMockWhereTyper(t *testing.T) {
-	w := mockWhereTyper{typeValue: WhereTypeAnd}
-	query, args := w.Where()
-	assert.Equal(t, "name = ?", query)
-	assert.Equal(t, []any{"test"}, args)
-	assert.Equal(t, WhereTypeAnd, w.WhereType())
+func (w *whereTypeSuite) TestWhereType_IsValid() {
+	w.True(WhereTypeAnd.IsValid())
+	w.True(WhereTypeOr.IsValid())
+	w.False(WhereType("INVALID").IsValid())
+}
+
+func (w *whereTypeSuite) TestMockWherer() {
+	mw := new(mockWherer)
+	query, args := mw.Where()
+	w.Equal("id = ?", query)
+	w.Equal([]any{1}, args)
+}
+
+func (w *whereTypeSuite) TestMockWhereTyper() {
+	mw := &mockWhereTyper{typeValue: WhereTypeAnd}
+	query, args := mw.Where()
+	w.Equal("name = ?", query)
+	w.Equal([]any{"test"}, args)
+	w.Equal(WhereTypeAnd, mw.WhereType())
 }
