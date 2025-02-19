@@ -22,7 +22,10 @@ type LastId = string
 type LastValue = string
 
 // LimitParam defines the model for limit_param.
-type LimitParam = string
+type LimitParam = int
+
+// Offset defines the model for offset.
+type Offset = int
 
 // Since defines the model for since.
 type Since = string

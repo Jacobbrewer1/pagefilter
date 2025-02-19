@@ -6,7 +6,8 @@ components:
       in: query
       description: Report type
       schema:
-        type: string
+        type: integer
+        example: 10
     last_value:
       name: last_val
       in: query
@@ -19,6 +20,13 @@ components:
       description: Pagination details, last value of the id column on the previous page.
       schema:
         type: string
+    offset:
+      name: offset
+      in: query
+      description: Pagination details, offset value.
+      schema:
+        type: integer
+        example: 0
     sort_by:
       name: sort_by
       in: query

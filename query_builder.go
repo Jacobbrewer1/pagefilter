@@ -47,24 +47,6 @@ func (p *Paginator) ParseRequest(req *http.Request, sortColumns ...string) error
 	return p.SetDetails(pd, sortColumns...)
 }
 
-// DetailsFromRequest retrieves the paginator details from the request.
-func DetailsFromRequest(req *http.Request) (*PaginatorDetails, error) {
-	q := req.URL.Query()
-
-	limit, err := getLimit(q)
-	if err != nil {
-		return nil, fmt.Errorf("%v: %w", err, ErrInvalidPaginatorDetails)
-	}
-
-	return &PaginatorDetails{
-		Limit:   limit,
-		LastVal: q.Get(QueryLastVal),
-		LastID:  q.Get(QueryLastID),
-		SortBy:  q.Get(QuerySortBy),
-		SortDir: q.Get(QuerySortDir),
-	}, nil
-}
-
 // SetDetails sets paginator details from the passed in arguments.
 func (p *Paginator) SetDetails(paginatorDetails *PaginatorDetails, sortColumns ...string) error {
 	p.details = paginatorDetails
@@ -73,7 +55,7 @@ func (p *Paginator) SetDetails(paginatorDetails *PaginatorDetails, sortColumns .
 	p.details.SortBy = ""
 	if wantedSort != "" {
 		for _, v := range sortColumns {
-			if v == wantedSort {
+			if v == wantedSort { // nolint:revive // This is a valid use case
 				p.details.SortBy = v
 				break
 			}
@@ -504,6 +486,11 @@ func (p *Paginator) Retrieve(pivot string, dest any) error {
 	if p.details.Limit > 0 {
 		sqlBuilder.WriteString("LIMIT ?")
 		args = append(args, p.details.Limit)
+	}
+
+	if p.details.Offset > 0 {
+		sqlBuilder.WriteString(" OFFSET ?")
+		args = append(args, p.details.Offset)
 	}
 
 	sql := sqlBuilder.String()
