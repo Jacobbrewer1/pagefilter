@@ -20,7 +20,7 @@ func TestRetrieve(t *testing.T) {
 	mockFilter.On("Where").Return("t.age > ?", []any{18})
 
 	mockDB.On("Select", mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything,
-		mock.Anything, mock.Anything, mock.Anything).Return(nil)
+		mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
 	p := &Paginator{
 		db: mockDB,

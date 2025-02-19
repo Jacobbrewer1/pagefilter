@@ -29,9 +29,10 @@ const (
 
 	QueryLastVal = "last_val"
 	QueryLastID  = "last_id"
+	QueryLimit   = "limit"
+	QueryOffset  = "offset"
 	QuerySortBy  = "sort_by"
 	QuerySortDir = "sort_dir"
-	QueryLimit   = "limit"
 
 	dbTagAutoIncrement = "autoinc"
 	dbTagPrimaryKey    = "pk"
