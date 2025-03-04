@@ -92,7 +92,7 @@ func (p *Paginator) First() (string, error) {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
@@ -154,7 +154,7 @@ func (p *Paginator) pivotFromValue() (string, error) {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
@@ -221,7 +221,7 @@ func (p *Paginator) pivotFromID() (string, error) {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
@@ -299,7 +299,7 @@ func (p *Paginator) Pivot() (string, error) {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
@@ -380,7 +380,7 @@ func (p *Paginator) Retrieve(pivot string, dest any) error {
 	}
 
 	cols := new(strings.Builder)
-	for i := 0; i < elemType.NumField(); i++ {
+	for i := range elemType.NumField() {
 		field := elemType.Field(i)
 		dbTag := field.Tag.Get("db")
 		switch dbTag {
@@ -432,7 +432,7 @@ func (p *Paginator) Retrieve(pivot string, dest any) error {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
@@ -515,7 +515,7 @@ func (p *Paginator) Counts(dest *int64) error {
 	wSQL, wArgs := p.filter.Where()
 	var gSQL string
 	if g, ok := p.filter.(Grouper); ok && len(g.Group()) > 0 {
-		gSQL = fmt.Sprintf("GROUP BY %s", strings.Join(g.Group(), ", "))
+		gSQL = "GROUP BY " + strings.Join(g.Group(), ", ")
 	}
 
 	// Be aware of SQL injection if modifying the below SQL. Any parameters in the sprintf
