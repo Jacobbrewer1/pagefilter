@@ -55,10 +55,12 @@ func (p *Paginator) SetDetails(paginatorDetails *PaginatorDetails, sortColumns .
 	p.details.SortBy = ""
 	if wantedSort != "" {
 		for _, v := range sortColumns {
-			if v == wantedSort { // nolint:revive // This is a valid use case
-				p.details.SortBy = v
-				break
+			if v != wantedSort {
+				continue
 			}
+
+			p.details.SortBy = v
+			break
 		}
 		if p.details.SortBy == "" {
 			return fmt.Errorf("invalid sort %q", wantedSort)
