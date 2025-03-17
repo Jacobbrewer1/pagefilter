@@ -2,15 +2,13 @@ module github.com/jacobbrewer1/pagefilter
 
 go 1.24
 
-toolchain go1.24.0
-
 require (
 	github.com/jacobbrewer1/uhttp v0.0.11
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/stretchr/testify v1.10.0
-	github.com/vektra/mockery/v2 v2.53.0
+	github.com/vektra/mockery/v2 v2.53.2
 )
 
 require (
