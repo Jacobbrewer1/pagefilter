@@ -58,7 +58,7 @@ var limitMin = sync.OnceValue(func() int {
 	// If a config value is set, use it; otherwise, use the default
 	limit := vip.GetInt(configKeyLimitMin)
 	if limit <= 0 {
-		return defaultPageLimit
+		return minLimit
 	}
 	return limit
 })
