@@ -38,12 +38,12 @@ var specViper = sync.OnceValue(func() viper.Viper {
 // limitDefault is the default limit for pagination.
 var limitDefault = sync.OnceValue(func() int {
 	vip := specViper()
-	vip.SetDefault(configKeyLimitDefault, defaultPageLimit)
+	vip.SetDefault(configKeyLimitDefault, queryLimitDefault)
 
 	// If a config value is set, use it; otherwise, use the default
 	limit := vip.GetInt(configKeyLimitDefault)
 	if limit < limitMin() {
-		return defaultPageLimit
+		return queryLimitDefault
 	} else if limit > limitMax() {
 		return limitMax()
 	}
@@ -53,12 +53,12 @@ var limitDefault = sync.OnceValue(func() int {
 // limitMin is the minimum limit for pagination
 var limitMin = sync.OnceValue(func() int {
 	vip := specViper()
-	vip.SetDefault(configKeyLimitMin, minLimit)
+	vip.SetDefault(configKeyLimitMin, queryLimitMin)
 
 	// If a config value is set, use it; otherwise, use the default
 	limit := vip.GetInt(configKeyLimitMin)
 	if limit <= 0 {
-		return minLimit
+		return queryLimitMin
 	}
 	return limit
 })
@@ -66,12 +66,12 @@ var limitMin = sync.OnceValue(func() int {
 // limitMax is the maximum limit for pagination
 var limitMax = sync.OnceValue(func() int {
 	vip := specViper()
-	vip.SetDefault(configKeyLimitMax, maxLimit)
+	vip.SetDefault(configKeyLimitMax, queryLimitMax)
 
 	// If a config value is set, use it; otherwise, use the default
 	limit := vip.GetInt(configKeyLimitMax)
 	if limit <= 0 {
-		return maxLimit
+		return queryLimitMax
 	}
 	return limit
 })

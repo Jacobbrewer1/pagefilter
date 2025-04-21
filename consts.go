@@ -13,9 +13,9 @@ const (
 	// Like is the partial match operator
 	Like = "like"
 
-	defaultPageLimit = 100
-	maxLimit         = 20000
-	minLimit         = 1
+	queryLimitDefault = 100
+	queryLimitMin     = 1
+	queryLimitMax     = 20000
 
 	orderAsc  = "asc"
 	orderDesc = "desc"

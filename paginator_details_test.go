@@ -18,11 +18,11 @@ func TestGetLimit(t *testing.T) {
 		wantLimit int
 		wantErr   bool
 	}{
-		{"default limit", url.Values{}, defaultPageLimit, false},
+		{"default limit", url.Values{}, queryLimitDefault, false},
 		{"valid limit", url.Values{QueryLimit: {"10"}}, 10, false},
-		{"invalid limit", url.Values{QueryLimit: {"invalid"}}, -1, true},
-		{"limit exceeds max", url.Values{QueryLimit: {"100000"}}, maxLimit, false},
-		{"zero limit", url.Values{QueryLimit: {"0"}}, defaultPageLimit, false},
+		{"invalid limit", url.Values{QueryLimit: {"invalid"}}, 0, true},
+		{"limit exceeds max", url.Values{QueryLimit: {"100000"}}, queryLimitMax, false},
+		{"zero limit", url.Values{QueryLimit: {"0"}}, 1, false},
 	}
 
 	for _, tt := range tests {
