@@ -60,11 +60,12 @@ func getLimit(q url.Values) (int, error) {
 	if err != nil {
 		return 0, fmt.Errorf("invalid limit: %w", err)
 	}
-	if limit < limitMin() {
+	switch {
+	case limit < limitMin():
 		limit = limitMin()
-	} else if limit > limitMax() {
+	case limit > limitMax():
 		limit = limitMax()
-	} else if limit <= 0 {
+	case limit <= 0:
 		limit = limitDefault()
 	}
 	return limit, nil
