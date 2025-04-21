@@ -15,6 +15,7 @@ const (
 
 	defaultPageLimit = 100
 	maxLimit         = 20000
+	minLimit         = 1
 
 	orderAsc  = "asc"
 	orderDesc = "desc"

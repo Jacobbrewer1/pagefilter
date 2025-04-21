@@ -50,18 +50,20 @@ func DetailsFromRequest(req *http.Request) (*PaginatorDetails, error) {
 	}, nil
 }
 
-func getLimit(q url.Values) (limit int, err error) {
-	limit = defaultPageLimit
-	if limitStr := q.Get(QueryLimit); limitStr != "" {
-		if limit, err = strconv.Atoi(limitStr); err != nil {
-			return -1, fmt.Errorf("invalid limit: %w", err)
-		}
+func getLimit(q url.Values) (int, error) {
+	limit := limitDefault()
+	limitStr := q.Get(QueryLimit)
+	if limitStr == "" {
+		return limit, nil
 	}
-	if limit > maxLimit {
-		limit = maxLimit
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		return 0, fmt.Errorf("invalid limit: %w", err)
 	}
-	if limit == 0 {
-		limit = defaultPageLimit
+	if limit > limitMax() {
+		limit = limitMax()
+	} else if limit <= 0 {
+		limit = limitDefault()
 	}
 	return limit, nil
 }
@@ -108,10 +110,10 @@ func GetPaginatorDetails(
 		d.SortDir = string(*sortDir)
 	}
 	if d.Limit <= 0 {
-		d.Limit = defaultPageLimit
+		d.Limit = limitDefault()
 	}
-	if d.Limit > maxLimit {
-		d.Limit = maxLimit
+	if d.Limit > limitMax() {
+		d.Limit = limitMax()
 	}
 	return d
 }
