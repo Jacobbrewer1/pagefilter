@@ -66,12 +66,14 @@ func getLimit(q url.Values) (limit int, err error) {
 	return limit, nil
 }
 
-func getOffset(q url.Values) (offset int, err error) {
-	offset = -1
-	if offsetStr := q.Get(QueryOffset); offsetStr != "" {
-		if offset, err = strconv.Atoi(offsetStr); err != nil {
-			return -1, fmt.Errorf("invalid offset: %w", err)
-		}
+func getOffset(q url.Values) (int, error) {
+	offsetStr := q.Get(QueryOffset)
+	if offsetStr == "" {
+		return 0, nil
+	}
+	offset, err := strconv.Atoi(offsetStr)
+	if err != nil {
+		return 0, fmt.Errorf("invalid offset: %w", err)
 	}
 	return offset, nil
 }
