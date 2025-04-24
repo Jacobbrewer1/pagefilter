@@ -56,9 +56,16 @@ func getLimit(q url.Values) (int, error) {
 	if limitStr == "" {
 		return limit, nil
 	}
-	limit, err := strconv.Atoi(limitStr)
+	var err error
+	limit, err = strconv.Atoi(limitStr)
 	if err != nil {
 		return 0, fmt.Errorf("invalid limit: %w", err)
+	}
+	if limit > queryLimitMax {
+		return queryLimitMax, nil
+	}
+	if limit < queryLimitMin {
+		return queryLimitMin, nil
 	}
 	return limit, nil
 }
