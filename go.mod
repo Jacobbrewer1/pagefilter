@@ -8,7 +8,7 @@ require (
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.1.1
 	github.com/stretchr/testify v1.10.0
-	github.com/vektra/mockery/v2 v2.53.3
+	github.com/vektra/mockery/v2 v2.53.4
 )
 
 require (
