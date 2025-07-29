@@ -17,7 +17,7 @@ github.com/dprotaso/go-yit
 ## explicit; go 1.17
 github.com/fsnotify/fsnotify
 github.com/fsnotify/fsnotify/internal
-# github.com/getkin/kin-openapi v0.131.0
+# github.com/getkin/kin-openapi v0.132.0
 ## explicit; go 1.22.5
 github.com/getkin/kin-openapi/openapi3
 # github.com/go-openapi/jsonpointer v0.21.0
@@ -91,8 +91,8 @@ github.com/mohae/deepcopy
 # github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822
 ## explicit
 github.com/munnerz/goautoneg
-# github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
-## explicit; go 1.21.0
+# github.com/oapi-codegen/oapi-codegen/v2 v2.5.0
+## explicit; go 1.22.5
 github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
 github.com/oapi-codegen/oapi-codegen/v2/pkg/codegen
 github.com/oapi-codegen/oapi-codegen/v2/pkg/util
@@ -152,8 +152,13 @@ github.com/sourcegraph/conc
 github.com/sourcegraph/conc/internal/multierror
 github.com/sourcegraph/conc/iter
 github.com/sourcegraph/conc/panics
-# github.com/speakeasy-api/openapi-overlay v0.9.0
-## explicit; go 1.21.0
+# github.com/speakeasy-api/jsonpath v0.6.0
+## explicit; go 1.22
+github.com/speakeasy-api/jsonpath/pkg/jsonpath
+github.com/speakeasy-api/jsonpath/pkg/jsonpath/config
+github.com/speakeasy-api/jsonpath/pkg/jsonpath/token
+# github.com/speakeasy-api/openapi-overlay v0.10.2
+## explicit; go 1.22
 github.com/speakeasy-api/openapi-overlay/pkg/loader
 github.com/speakeasy-api/openapi-overlay/pkg/overlay
 # github.com/spf13/afero v1.12.0
@@ -208,6 +213,7 @@ go.uber.org/multierr
 # golang.org/x/mod v0.23.0
 ## explicit; go 1.22.0
 golang.org/x/mod/internal/lazyregexp
+golang.org/x/mod/modfile
 golang.org/x/mod/module
 golang.org/x/mod/semver
 # golang.org/x/sync v0.11.0
