@@ -6,7 +6,7 @@ require (
 	github.com/jacobbrewer1/uhttp v0.0.12
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/oapi-codegen/oapi-codegen/v2 v2.4.1
-	github.com/oapi-codegen/runtime v1.1.1
+	github.com/oapi-codegen/runtime v1.1.2
 	github.com/stretchr/testify v1.10.0
 	github.com/vektra/mockery/v2 v2.53.4
 )
